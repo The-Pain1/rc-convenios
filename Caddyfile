@@ -1,0 +1,9 @@
+# Substitua rcconvenios.com.br pelo seu domínio
+rcconvenios.com.br {
+    reverse_proxy localhost:3000
+}
+
+# Redireciona www para sem www (opcional)
+www.rcconvenios.com.br {
+    redir https://rcconvenios.com.br{uri} permanent
+}

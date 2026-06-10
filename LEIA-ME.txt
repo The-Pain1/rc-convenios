@@ -1,0 +1,77 @@
+╔══════════════════════════════════════════════════════════════╗
+║          RC CONVÊNIOS — Sistema de Consulta v5.0             ║
+╚══════════════════════════════════════════════════════════════╝
+
+─── USO LOCAL (rede interna) ──────────────────────────────────
+
+  1. Instale Node.js: https://nodejs.org (versão LTS)
+
+  2. Abra o CMD na pasta e rode:
+       npm install
+
+  3. Inicie o servidor:
+       npm start
+
+  4. Acesse: http://localhost:3000
+     Rede:   http://SEU_IP:3000
+
+  Login padrão:
+    Usuário: admin
+    Senha:   1234  ← troque após o primeiro acesso!
+
+─── HOSPEDAGEM EM VPS ─────────────────────────────────────────
+
+  REQUISITOS:
+    - VPS com Ubuntu 20.04+ ou Debian 11+
+    - Domínio apontando pro IP do servidor (registro DNS tipo A)
+
+  PASSO 1 — No seu computador, copie os arquivos pro VPS:
+    scp -r convenios-sistema/* root@SEU_IP:/var/www/convenios/
+
+  PASSO 2 — Conecte no VPS:
+    ssh root@SEU_IP
+
+  PASSO 3 — Instale as dependências:
+    bash /var/www/convenios/instalar.sh
+
+  PASSO 4 — Instale os pacotes Node:
+    cd /var/www/convenios && npm install
+
+  PASSO 5 — Configure seu domínio:
+    nano /var/www/convenios/Caddyfile
+    (troque rcconvenios.com.br pelo seu domínio)
+
+  PASSO 6 — Suba o sistema:
+    bash /var/www/convenios/iniciar.sh
+
+  ✅  Pronto! O Caddy configura HTTPS automaticamente.
+      Acesse: https://seudominio.com.br
+
+─── COMANDOS ÚTEIS NO VPS ─────────────────────────────────────
+
+  Ver logs em tempo real:    pm2 logs rcconvenios
+  Reiniciar após alteração:  pm2 restart rcconvenios
+  Ver status:                pm2 status
+  Parar o sistema:           pm2 stop rcconvenios
+
+─── ARQUIVOS IMPORTANTES ──────────────────────────────────────
+
+  server.js          → servidor Node.js
+  public/index.html  → interface web
+  Caddyfile          → configuração HTTPS (edite o domínio)
+  instalar.sh        → instalação das dependências no VPS
+  iniciar.sh         → inicia/reinicia o sistema no VPS
+  data/dados.json    → planilhas importadas (BACKUP ESTE ARQUIVO)
+  data/usuarios.json → usuários cadastrados (BACKUP ESTE ARQUIVO)
+
+─── BACKUP DOS DADOS ──────────────────────────────────────────
+
+  Os dados ficam em /var/www/convenios/data/
+  Faça backup regularmente:
+    scp root@SEU_IP:/var/www/convenios/data/*.json ./backup/
+
+─── SENHA ADMIN ───────────────────────────────────────────────
+
+  Mude pelo próprio sistema após o primeiro login.
+  Padrão: login=admin / senha=1234
+

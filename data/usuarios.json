@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1e69a3ce-b945-4c02-9ca1-541ad3d75fca",
+    "nome": "Andrezin",
+    "login": "admin",
+    "email": "andrelima@rccard.com.br",
+    "senha": "485af0a77e736249d43f31461999120d49e4d558d3c6569c378a7867b59ac60d",
+    "role": "admin",
+    "ativo": true,
+    "criadoEm": "2026-06-08T14:54:11.304Z"
+  },
+  {
+    "id": "9d49c6da-b248-400d-9390-d4e75501f73b",
+    "nome": "Rodrigo Tavora",
+    "login": "tavora",
+    "email": "rtavora@rccard.com.br",
+    "senha": "4a69f7f739cff08d47d33ba634ac70f3eb68addb599a257007bf89af729d1c1d",
+    "role": "user",
+    "ativo": true,
+    "criadoEm": "2026-06-08T14:57:10.011Z"
+  }
+]
