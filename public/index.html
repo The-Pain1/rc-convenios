@@ -905,7 +905,7 @@ function renderKpisConsolidados(d){
       lbl:'IPP do convênio',
       val:`${Number(d.ipp.valor).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`,
       sub: d.ipp.detalhe
-        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} serv. ÷ ${d.ipp.detalhe.totalContratos} contratos`
+        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} serv.`
         : d.ipp.nome||'taxa de repasse',
       cls:'kp-ye',
       ico:`<svg viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`
