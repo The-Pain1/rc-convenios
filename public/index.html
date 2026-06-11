@@ -881,7 +881,7 @@ function renderKpisConsolidados(d){
     {
       lbl:'Produção total',
       val:fmtM(prodTotal),
-      sub:`Consig. ${fmtM(prodCons)} · Cartão ${fmtM(prodCart)} · Fictor ${fmtM(prodFictor)}`,
+      sub:`Cartos. ${fmtM(prodCons)} · Intra ${fmtM(prodCart)} · Fictor ${fmtM(prodFictor)}`,
       cls:'kp-or', ico:SVG.prod
     },
     {
@@ -893,13 +893,12 @@ function renderKpisConsolidados(d){
     {
       lbl:'Canceladas total',
       val:fmtM(cancelTotal),
-      sub:`Consig. ${fmtM(cancelCons)} · Cartão ${fmtM(cancelCart)} · Fictor ${fmtM(cancelFictor)}`,
       cls:'kp-re', ico:SVG.cancel
     },
     {
       lbl:'Total de operações',
       val:qtdTotal.toLocaleString('pt-BR'),
-      sub:`${qtdCons} consig. · ${qtdCart} cartão · ${qtdFictor} Fictor`,
+      sub:`${qtdCons} Cartos. · ${qtdCart} Intra · ${qtdFictor} Fictor`,
       cls:'kp-bl', ico:SVG.ops
     },
     ...(d.ipp&&d.ipp.valor!==null?[{
@@ -1066,6 +1065,7 @@ function renderBlocoCartoes(d){
     liq:`<svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
     par:`<svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`,
     cnt:`<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+    cancel:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
   };
   const hasCancelCart = kc.totalCancelado > 0;
   document.getElementById('kpi-cart').innerHTML=[
