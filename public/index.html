@@ -1323,9 +1323,9 @@ function renderVisaoGeral(d,el){
   };
 
   const kpis=[
-    {lbl:'Produção total',val:fmtM(totais.prod),sub:`Consig. ${fmtM(totais.prodCons)} · Cartão ${fmtM(totais.prodCart)} · Fictor ${fmtM(totais.prodFict)}`,cls:'kp-or',ico:SVG.prod},
-    {lbl:'Canceladas total',val:fmtM(totais.cancel),sub:`Consig. ${fmtM(totais.cancelCons)} · Cartão ${fmtM(totais.cancelCart)} · Fictor ${fmtM(totais.cancelFict)}`,cls:'kp-re',ico:SVG.cancel},
-    {lbl:'Total operações',val:totais.ops.toLocaleString('pt-BR'),sub:'propostas + cartões + Fictor',cls:'kp-bl',ico:SVG.ops},
+    {lbl:'Produção total',val:fmtM(totais.prod),sub:`Cartos. ${fmtM(totais.prodCons)} · Intra ${fmtM(totais.prodCart)} · Fictor ${fmtM(totais.prodFict)}`,cls:'kp-or',ico:SVG.prod},
+    {lbl:'Canceladas total',val:fmtM(totais.cancel),sub:`Cartos. ${fmtM(totais.cancelCons)} · Intra ${fmtM(totais.cancelCart)} · Fictor ${fmtM(totais.cancelFict)}`,cls:'kp-re',ico:SVG.cancel},
+    {lbl:'Total operações',val:totais.ops.toLocaleString('pt-BR'),sub:'Cartos + Intra + Fictor',cls:'kp-bl',ico:SVG.ops},
   ];
 
   el.innerHTML=`
