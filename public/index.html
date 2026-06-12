@@ -107,9 +107,9 @@ body{min-height:100vh;display:flex;flex-direction:column}
 /* LOGIN */
 #login-screen{position:fixed;inset:0;z-index:9999;display:flex;overflow:hidden}
 #login-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
-.login-left{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:48px 56px;background:linear-gradient(145deg,#0c0c0f 0%,#141418 60%,#1a1008 100%);position:relative;z-index:1;overflow:hidden}
-.login-left::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;background:radial-gradient(circle,rgba(249,115,22,.12) 0%,transparent 65%);pointer-events:none}
-.login-left::after{content:'';position:absolute;bottom:-150px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(249,115,22,.07) 0%,transparent 65%);pointer-events:none}
+.login-left{width:460px;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:40px;position:relative;z-index:1;border-right:1px solid rgba(255,255,255,.06)}
+.login-right::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;background:radial-gradient(circle,rgba(249,115,22,.12) 0%,transparent 65%);pointer-events:none}
+.login-right::after{content:'';position:absolute;bottom:-150px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(249,115,22,.07) 0%,transparent 65%);pointer-events:none}
 .login-brand{position:relative;z-index:1}
 .login-logo-wrap{display:flex;align-items:center;gap:14px}
 .login-logo-icon{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,var(--ord),var(--or));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(249,115,22,.4)}
@@ -125,7 +125,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .lstat-val{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px}
 .lstat-lbl{font-size:11px;color:rgba(255,255,255,.4);font-weight:500;margin-top:2px}
 .lstat-div{width:1px;height:36px;background:rgba(255,255,255,.1)}
-.login-right{width:460px;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:40px;position:relative;z-index:1;border-left:1px solid rgba(255,255,255,.06)}
+.login-right{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:48px 56px;background:linear-gradient(145deg,#0c0c0f 0%,#141418 60%,#1a1008 100%);position:relative;z-index:1;overflow:hidden}
 .login-card{width:100%;max-width:380px;animation:loginIn .5s cubic-bezier(.22,1,.36,1)}
 .lcard-header{margin-bottom:32px}
 .lcard-title{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
@@ -149,7 +149,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .btn-login:hover svg{transform:translateX(3px)}
 .btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .login-footer{margin-top:24px;font-size:11px;color:var(--text3);text-align:center}
-@media(max-width:860px){.login-left{display:none}.login-right{width:100%;border:none;background:var(--bg)}}
+@media(max-width:860px){.login-right{display:none}.login-left{width:100%;border:none;background:var(--bg)}}
 
 /* APP */
 #app{display:none;flex-direction:column;min-height:100vh}#app.show{display:flex}
@@ -321,7 +321,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
           </svg>
         </div>
         <div>
-          <div class="login-brand-name"><span>RC </span>Convênios</div>
+          <div class="login-brand-name"> <span>RC</span> Convênios</div>
           <div class="login-brand-tag">Sistema de Consulta</div>
         </div>
       </div>
@@ -528,7 +528,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
           </div>
 
           <!-- KPIs consolidados -->
-          <div class="sdiv"><span>📊 Visão geral</span></div>
+          <div class="sdiv"><span>📊 Visão geral consolidada</span></div>
           <div class="kpirow" id="kpi-consolidado"></div>
 
           <!-- Propostas -->
@@ -1095,7 +1095,7 @@ function renderKpisConsolidados(d){
       lbl:'IPP do convênio',
       val:`${Number(d.ipp.valor).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`,
       sub: d.ipp.detalhe
-        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} Servidores.`
+        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} Servidores`
         : d.ipp.nome||'taxa de repasse',
       cls:'kp-ye',
       ico:`<svg viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`
@@ -1237,7 +1237,7 @@ function renderBlocoCartoes(d){
   const prColorsC=['#3b82f6','#f97316','#22c55e','#f59e0b','#a855f7','#ef4444'];
 
   bc.innerHTML=`
-    <div class="sdiv"><span>💳 Operações Intra</span></div>
+    <div class="sdiv"><span>💳 Operações de Intra</span></div>
     <div class="kpirow" id="kpi-cart"></div>
     <div class="charts-2">
       <div class="ccard">
@@ -1255,7 +1255,7 @@ function renderBlocoCartoes(d){
     liq:`<svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
     par:`<svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`,
     cnt:`<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-    cancel:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+    cancel:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,  
   };
   const hasCancelCart = kc.totalCancelado > 0;
   document.getElementById('kpi-cart').innerHTML=[
