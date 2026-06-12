@@ -7,7 +7,7 @@ const path     = require('path');
 const crypto   = require('crypto');
 
 const app  = express();
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 
 // ── Pastas ──────────────────────────────────────────────────
 const DATA_DIR = path.join(__dirname, 'data');
@@ -40,7 +40,7 @@ function hashPass(senha) {
 }
 
 function initAdmin() {
-  const users = readUsers(); 
+  const users = readUsers();
   if (!users.find(u => u.role === 'admin')) {
     users.push({
       id:       crypto.randomUUID(),
@@ -319,7 +319,7 @@ app.get('/api/convenio', (req, res) => {
         const ctFict=fictor.filter(r=>isPago(r['Status'])).length;
         const totalContratos=ctProp+ctCart+ctFict;
         if(totalContratos>0){
-          ippValor=((totalContratos/qtdServ)*100);
+          ippValor=((qtdServ/totalContratos)*100);
           ippNome=getNomeServ(servRow);
           ippDetalhe={qtdServ,totalContratos,ctProp,ctCart,ctFict};
         }

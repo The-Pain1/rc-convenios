@@ -82,30 +82,51 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .ac-loading svg{width:14px;height:14px;stroke:var(--text3);fill:none;stroke-width:2;animation:spin 1s linear infinite}
 
 /* LOGIN */
-#login-screen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease}
-.orb1,.orb2{position:absolute;border-radius:50%;filter:blur(80px);animation:orb 12s ease-in-out infinite}
-.orb1{width:480px;height:480px;background:radial-gradient(circle,rgba(249,115,22,.16),transparent 70%);top:-120px;right:-80px}
-.orb2{width:340px;height:340px;background:radial-gradient(circle,rgba(249,115,22,.08),transparent 70%);bottom:-80px;left:-60px;animation-delay:-6s}
-.login-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.login-card{position:relative;z-index:1;width:100%;max-width:400px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:44px 40px;box-shadow:0 24px 64px rgba(0,0,0,.5);animation:loginIn .5s cubic-bezier(.22,1,.36,1)}
-.login-logo{width:52px;height:52px;border-radius:14px;margin:0 auto 24px;background:linear-gradient(135deg,var(--ord),var(--or));display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-o)}
-.login-logo svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.login-card h1{font-size:22px;font-weight:800;text-align:center;margin-bottom:4px}
-.login-sub{font-size:13px;color:var(--text2);text-align:center;margin-bottom:28px}
-.lfield{margin-bottom:14px}
-.lfield label{display:block;font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
-.lfield input{width:100%;padding:11px 14px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:9px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
-.lfield input:focus{border-color:var(--or);box-shadow:0 0 0 3px var(--orb)}
-.lerr{background:var(--rel);border:1px solid rgba(239,68,68,.3);color:var(--re);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:500;margin-bottom:14px;display:none;align-items:center;gap:8px}
+#login-screen{position:fixed;inset:0;z-index:9999;display:flex;overflow:hidden}
+#login-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+.login-left{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:48px 56px;background:linear-gradient(145deg,#0c0c0f 0%,#141418 60%,#1a1008 100%);position:relative;z-index:1;overflow:hidden}
+.login-left::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;background:radial-gradient(circle,rgba(249,115,22,.12) 0%,transparent 65%);pointer-events:none}
+.login-left::after{content:'';position:absolute;bottom:-150px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(249,115,22,.07) 0%,transparent 65%);pointer-events:none}
+.login-brand{position:relative;z-index:1}
+.login-logo-wrap{display:flex;align-items:center;gap:14px}
+.login-logo-icon{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,var(--ord),var(--or));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(249,115,22,.4)}
+.login-logo-icon svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.login-brand-name{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.login-brand-name span{color:var(--or)}
+.login-brand-tag{font-size:11px;color:rgba(255,255,255,.4);font-weight:500;margin-top:1px}
+.login-hero{position:relative;z-index:1}
+.login-hero-title{font-size:52px;font-weight:800;line-height:1.1;letter-spacing:-2px;color:#fff;margin-bottom:18px}
+.login-hero-title em{font-style:normal;background:linear-gradient(135deg,var(--or),#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.login-hero-sub{font-size:15px;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:40px}
+.login-stats{display:flex;align-items:center;gap:20px}
+.lstat-val{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.lstat-lbl{font-size:11px;color:rgba(255,255,255,.4);font-weight:500;margin-top:2px}
+.lstat-div{width:1px;height:36px;background:rgba(255,255,255,.1)}
+.login-right{width:460px;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:40px;position:relative;z-index:1;border-left:1px solid rgba(255,255,255,.06)}
+.login-card{width:100%;max-width:380px;animation:loginIn .5s cubic-bezier(.22,1,.36,1)}
+.lcard-header{margin-bottom:32px}
+.lcard-title{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
+.lcard-sub{font-size:13px;color:var(--text2)}
+.lfield{margin-bottom:16px}
+.lfield label{display:block;font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+.linput-wrap{position:relative;display:flex;align-items:center}
+.linput-wrap svg{position:absolute;left:13px;width:15px;height:15px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;flex-shrink:0}
+.linput-wrap input{width:100%;padding:12px 14px 12px 40px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:10px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+.linput-wrap input:focus{border-color:var(--or);box-shadow:0 0 0 3px var(--orb)}
+.linput-wrap input::placeholder{color:var(--text3)}
+.leye{position:absolute;right:12px;cursor:pointer;padding:4px;opacity:.5;transition:opacity .15s}
+.leye:hover{opacity:1}
+.leye svg{width:15px;height:15px;stroke:var(--text2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lerr{background:var(--rel);border:1px solid rgba(239,68,68,.3);color:var(--re);border-radius:9px;padding:11px 14px;font-size:13px;font-weight:500;margin-bottom:16px;display:none;align-items:center;gap:9px}
 .lerr.show{display:flex;animation:shake .4s ease}
 .lerr svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
-.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--ord),var(--or));color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:var(--shadow-o);transition:all .2s;margin-top:4px}
-.btn-login:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(249,115,22,.4)}
-.login-or{display:flex;align-items:center;gap:10px;margin:18px 0 0}
-.login-or::before,.login-or::after{content:'';flex:1;height:1px;background:var(--border)}
-.login-or span{font-size:12px;color:var(--text3)}
-.btn-user{width:100%;padding:11px;margin-top:10px;background:transparent;color:var(--text2);border:1.5px solid var(--border2);border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
-.btn-user:hover{border-color:var(--or);color:var(--or);background:var(--orl)}
+.btn-login{width:100%;padding:14px 20px;background:linear-gradient(135deg,var(--ord),var(--or));color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 20px rgba(249,115,22,.3);transition:all .2s;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-login svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(249,115,22,.45)}
+.btn-login:hover svg{transform:translateX(3px)}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.login-footer{margin-top:24px;font-size:11px;color:var(--text3);text-align:center}
+@media(max-width:860px){.login-left{display:none}.login-right{width:100%;border:none;background:var(--bg)}}
 
 /* APP */
 #app{display:none;flex-direction:column;min-height:100vh}#app.show{display:flex}
@@ -264,21 +285,72 @@ body{min-height:100vh;display:flex;flex-direction:column}
 
 <!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-bg"><div class="orb1"></div><div class="orb2"></div></div>
-  <div class="login-card">
-    <div class="login-logo"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
-    <h1>RC Convênios</h1>
-    <p class="login-sub">RC Convênios — Consulta</p>
-    <div class="lfield">
-      <label>Usuário ou e-mail</label>
-      <input type="text" id="login-user" placeholder="usuario ou email@..." onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
+  <canvas id="login-canvas"></canvas>
+  <div class="login-left">
+    <div class="login-brand">
+      <div class="login-logo-wrap">
+        <div class="login-logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="login-brand-name"><span>RC </span>Convênios</div>
+          <div class="login-brand-tag">Sistema de Consulta</div>
+        </div>
+      </div>
     </div>
-    <div class="lfield">
-      <label>Senha</label>
-      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')tryLogin()"/>
+    <div class="login-hero">
+      <div class="login-hero-title">Dados do seu<br>convênio em<br><em>segundos.</em></div>
+      <div class="login-hero-sub">Consulte produção, inadimplência e IPP<br>de qualquer convênio com um clique.</div>
+      <div class="login-stats">
+        <div class="lstat"><div class="lstat-val">5</div><div class="lstat-lbl">Planilhas integradas</div></div>
+        <div class="lstat-div"></div>
+        <div class="lstat"><div class="lstat-val">IPP</div><div class="lstat-lbl">Calculado automaticamente</div></div>
+        <div class="lstat-div"></div>
+        <div class="lstat"><div class="lstat-val">24/7</div><div class="lstat-lbl">Disponível online</div></div>
+      </div>
     </div>
-    <div class="lerr" id="adm-err"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="lerr-txt">Usuário ou senha incorretos.</span></div>
-    <button class="btn-login" onclick="tryLogin()">Entrar</button>
+  </div>
+  <div class="login-right">
+    <div class="login-card">
+      <div class="lcard-header">
+        <div class="lcard-title">Bem-vindo de volta</div>
+        <div class="lcard-sub">Entre com suas credenciais para acessar</div>
+      </div>
+      <div class="lfield">
+        <label>Usuário ou e-mail</label>
+        <div class="linput-wrap">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="login-user" placeholder="seu usuario ou email" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
+        </div>
+      </div>
+      <div class="lfield">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <label style="margin:0">Senha</label>
+        </div>
+        <div class="linput-wrap">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')tryLogin()"/>
+          <span class="leye" onclick="togglePass()" title="Mostrar senha">
+            <svg id="eye-off" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            <svg id="eye-on" style="display:none" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="lerr" id="adm-err">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="lerr-txt">Usuário ou senha incorretos.</span>
+      </div>
+      <button class="btn-login" id="btn-login" onclick="tryLogin()">
+        <span id="btn-login-txt">Entrar</span>
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <div class="login-footer">RC Convênios © 2026 · Sistema interno</div>
+    </div>
   </div>
 </div>
 
@@ -286,7 +358,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 <div id="app">
   <header class="topbar">
     <div class="tlogo"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
-    <span class="tname"><span>RC </span>Convênios</span>
+    <span class="tname">RC <span>Convênios</span></span>
     <div class="tsep"></div><span class="tsub">Sistema interno</span>
     <div class="tright">
       <span class="chip" id="chip">Sem dados</span>
@@ -418,7 +490,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
           </div>
 
           <!-- KPIs consolidados -->
-          <div class="sdiv"><span>📊 Visão geral </span></div>
+          <div class="sdiv"><span>📊 Visão geral</span></div>
           <div class="kpirow" id="kpi-consolidado"></div>
 
           <!-- Propostas -->
@@ -529,6 +601,83 @@ const API='';
 let isAdm=false;
 let charts={};
 
+/* ── Canvas animado no login ── */
+function initLoginCanvas(){
+  const canvas=document.getElementById('login-canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  let W=canvas.width=window.innerWidth;
+  let H=canvas.height=window.innerHeight;
+  window.addEventListener('resize',()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;});
+
+  // Partículas flutuantes
+  const particles=Array.from({length:55},()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    r:Math.random()*1.5+0.4,
+    vx:(Math.random()-.5)*.35,
+    vy:(Math.random()-.5)*.35,
+    o:Math.random()*.5+.1,
+  }));
+
+  // Linhas de grade sutil
+  function drawGrid(){
+    ctx.strokeStyle='rgba(249,115,22,0.03)';
+    ctx.lineWidth=1;
+    const sz=80;
+    for(let x=0;x<W;x+=sz){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=sz){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    drawGrid();
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(249,115,22,${p.o})`;
+      ctx.fill();
+    });
+    // Linhas entre partículas próximas
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x;
+        const dy=particles[i].y-particles[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<120){
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle=`rgba(249,115,22,${.08*(1-d/120)})`;
+          ctx.lineWidth=1;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+document.addEventListener('DOMContentLoaded', initLoginCanvas);
+
+/* ── Toggle senha ── */
+function togglePass(){
+  const inp=document.getElementById('login-pass');
+  const eyeOff=document.getElementById('eye-off');
+  const eyeOn=document.getElementById('eye-on');
+  if(inp.type==='password'){
+    inp.type='text';
+    eyeOff.style.display='none';
+    eyeOn.style.display='block';
+  } else {
+    inp.type='password';
+    eyeOff.style.display='block';
+    eyeOn.style.display='none';
+  }
+}
+
 /* ── Theme ── */
 // Carrega preferência salva ou usa dark como padrão
 let dark = localStorage.getItem('rc-theme') !== 'light';
@@ -559,6 +708,10 @@ async function tryLogin(){
   const login=document.getElementById('login-user').value.trim();
   const senha=document.getElementById('login-pass').value;
   if(!login||!senha){showLErr('Preencha usuário e senha.');return;}
+  const btn=document.getElementById('btn-login');
+  const txt=document.getElementById('btn-login-txt');
+  btn.disabled=true;
+  txt.textContent='Entrando…';
   try{
     const r=await fetch(API+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({login,senha})});
     const d=await r.json();
@@ -569,6 +722,7 @@ async function tryLogin(){
       showLErr(d.msg||'Usuário ou senha incorretos.');
     }
   }catch(e){showLErr('Erro de conexão com o servidor.');}
+  finally{btn.disabled=false;txt.textContent='Entrar';}
 }
 function showLErr(m){
   const e=document.getElementById('adm-err');
@@ -881,13 +1035,12 @@ function renderKpisConsolidados(d){
     {
       lbl:'Produção total',
       val:fmtM(prodTotal),
-      sub:`Cartos. ${fmtM(prodCons)} · Intra ${fmtM(prodCart)} · Fictor ${fmtM(prodFictor)}`,
       cls:'kp-or', ico:SVG.prod
     },
     {
       lbl:'Inadimplência',
       val:fmtM(inad),
-      sub:pctInad>0?`${pctInad.toFixed(1)}% da prod. consignado`:'sem inadimplência',
+      sub:pctInad>0?`${pctInad.toFixed(1)}% da prod. Cartos`:'sem inadimplência',
       cls:'kp-gr', ico:SVG.inad
     },
     {
@@ -905,7 +1058,7 @@ function renderKpisConsolidados(d){
       lbl:'IPP do convênio',
       val:`${Number(d.ipp.valor).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`,
       sub: d.ipp.detalhe
-        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} serv.`
+        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} Serviodres`
         : d.ipp.nome||'taxa de repasse',
       cls:'kp-ye',
       ico:`<svg viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`
@@ -941,7 +1094,7 @@ function renderBlocoPropostas(d){
   const prColors= ['#3b82f6','#f97316','#22c55e','#f59e0b','#a855f7','#ef4444','#06b6d4','#ec4899'];
 
   bp.innerHTML=`
-    <div class="sdiv"><span>📋 Operações Cartos</span></div>
+    <div class="sdiv"><span>📋 Operação Cartos</span></div>
 
     <!-- KPIs -->
     <div class="kpirow" id="kpi-prop"></div>

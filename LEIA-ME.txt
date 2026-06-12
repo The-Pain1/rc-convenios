@@ -16,7 +16,36 @@
      Rede:   http://SEU_IP:3000
 
   Login padrão:
-  Curioso...
+    Usuário: admin
+    Senha:   1234  ← troque após o primeiro acesso!
+
+─── HOSPEDAGEM EM VPS ─────────────────────────────────────────
+
+  REQUISITOS:
+    - VPS com Ubuntu 20.04+ ou Debian 11+
+    - Domínio apontando pro IP do servidor (registro DNS tipo A)
+
+  PASSO 1 — No seu computador, copie os arquivos pro VPS:
+    scp -r convenios-sistema/* root@SEU_IP:/var/www/convenios/
+
+  PASSO 2 — Conecte no VPS:
+    ssh root@SEU_IP
+
+  PASSO 3 — Instale as dependências:
+    bash /var/www/convenios/instalar.sh
+
+  PASSO 4 — Instale os pacotes Node:
+    cd /var/www/convenios && npm install
+
+  PASSO 5 — Configure seu domínio:
+    nano /var/www/convenios/Caddyfile
+    (troque rcconvenios.com.br pelo seu domínio)
+
+  PASSO 6 — Suba o sistema:
+    bash /var/www/convenios/iniciar.sh
+
+  ✅  Pronto! O Caddy configura HTTPS automaticamente.
+      Acesse: https://seudominio.com.br
 
 ─── COMANDOS ÚTEIS NO VPS ─────────────────────────────────────
 
@@ -37,8 +66,12 @@
 
 ─── BACKUP DOS DADOS ──────────────────────────────────────────
 
-   
+  Os dados ficam em /var/www/convenios/data/
+  Faça backup regularmente:
+    scp root@SEU_IP:/var/www/convenios/data/*.json ./backup/
 
 ─── SENHA ADMIN ───────────────────────────────────────────────
-curioso2....
+
+  Mude pelo próprio sistema após o primeiro login.
+  Padrão: login=admin / senha=1234
 
