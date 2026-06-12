@@ -218,7 +218,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 .kpi:nth-child(1){animation-delay:.04s}.kpi:nth-child(2){animation-delay:.08s}.kpi:nth-child(3){animation-delay:.12s}.kpi:nth-child(4){animation-delay:.16s}.kpi:nth-child(5){animation-delay:.20s}
 .kpi-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
 .kpi-ico svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.kpi-lbl{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.kpi-lbl{font-size:12px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .kpi-val{font-size:21px;font-weight:800;letter-spacing:-.5px;line-height:1}
 .kpi-sub{font-size:11px;color:var(--text2);margin-top:4px}
 .kp-or{border-left:3px solid var(--or)}.kp-or .kpi-ico{background:var(--orl);color:var(--or)}.kp-or .kpi-val{color:var(--or)}
@@ -309,7 +309,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
 <!-- LOGIN -->
 <div id="login-screen">
   <canvas id="login-canvas"></canvas>
-  <div class="login-left">
+  <div class="login-right" style="border-left:none;border-right:1px solid rgba(255,255,255,.06)">
     <div class="login-brand">
       <div class="login-logo-wrap">
         <div class="login-logo-icon">
@@ -338,7 +338,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
       </div>
     </div>
   </div>
-  <div class="login-right">
+  <div class="login-left">
     <div class="login-card">
       <div class="lcard-header">
         <div class="lcard-title">Bem-vindo de volta</div>
@@ -528,7 +528,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
           </div>
 
           <!-- KPIs consolidados -->
-          <div class="sdiv"><span>📊 Visão geral consolidada</span></div>
+          <div class="sdiv"><span>📊 Visão geral</span></div>
           <div class="kpirow" id="kpi-consolidado"></div>
 
           <!-- Propostas -->
@@ -1095,7 +1095,7 @@ function renderKpisConsolidados(d){
       lbl:'IPP do convênio',
       val:`${Number(d.ipp.valor).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`,
       sub: d.ipp.detalhe
-        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} serv. ÷ ${d.ipp.detalhe.totalContratos} contratos`
+        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} Servidores.`
         : d.ipp.nome||'taxa de repasse',
       cls:'kp-ye',
       ico:`<svg viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`

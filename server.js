@@ -319,7 +319,7 @@ app.get('/api/convenio', (req, res) => {
         const ctFict=fictor.filter(r=>isPago(r['Status'])).length;
         const totalContratos=ctProp+ctCart+ctFict;
         if(totalContratos>0){
-          ippValor=((totalContratos/qtdServ)*100);
+          ippValor=((qtdServ/totalContratos)*100);
           ippNome=getNomeServ(servRow);
           ippDetalhe={qtdServ,totalContratos,ctProp,ctCart,ctFict};
         }
