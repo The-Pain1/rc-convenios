@@ -42,6 +42,29 @@
 html{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
 body{min-height:100vh;display:flex;flex-direction:column}
 
+/* VISÃO GERAL */
+.vg-loading{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--text3);font-size:13px;padding:60px;flex-direction:column}
+.vg-loading svg{width:28px;height:28px;stroke:var(--or);fill:none;stroke-width:2;animation:spin 1s linear infinite}
+.vg-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.vg-top{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.vg-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.vg-bar-row:last-child{margin:0}
+.vg-bar-label{font-size:12px;font-weight:600;color:var(--text);width:180px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vg-bar-track{flex:1;height:8px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.vg-bar-fill{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+.vg-bar-val{font-size:12px;font-weight:700;width:80px;text-align:right;flex-shrink:0;color:var(--or)}
+.vg-bar-qty{font-size:11px;color:var(--text3);width:30px;text-align:right;flex-shrink:0}
+.top-item{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.top-item:last-child{border:none}
+.top-item:hover{background:var(--orl)}
+.top-rank{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;background:var(--bg3);color:var(--text3)}
+.top-rank.gold{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff}
+.top-rank.silver{background:linear-gradient(135deg,#94a3b8,#64748b);color:#fff}
+.top-rank.bronze{background:linear-gradient(135deg,#cd7c3a,#b45309);color:#fff}
+.top-nome{flex:1;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-val{font-size:13px;font-weight:700;color:var(--or);flex-shrink:0}
+.top-ops{font-size:11px;color:var(--text3);flex-shrink:0;margin-left:8px}
+
 /* USUARIOS */
 .uform-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;max-width:760px;box-shadow:var(--shadow);animation:fadeUp .3s ease}
 .uform-title{font-size:15px;font-weight:700;margin-bottom:16px}
@@ -376,6 +399,9 @@ body{min-height:100vh;display:flex;flex-direction:column}
       <div class="nitem" id="nav-upload" onclick="goPage('upload')" style="display:none">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Importar planilhas
       </div>
+      <div class="nitem" id="nav-visao" onclick="goPage('visao')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Visão geral
+      </div>
       <div class="nitem on" id="nav-consulta" onclick="goPage('consulta')">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Consultar convênio
       </div>
@@ -460,6 +486,18 @@ body{min-height:100vh;display:flex;flex-direction:column}
         </div>
       </div>
 
+      <!-- VISÃO GERAL -->
+      <div class="page" id="page-visao">
+        <div class="ptitle">Visão <span>geral</span></div>
+        <div class="psub">Consolidado de todas as planilhas — atualizado em tempo real.</div>
+        <div id="vg-content">
+          <div class="vg-loading">
+            <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            Carregando dados...
+          </div>
+        </div>
+      </div>
+
       <!-- CONSULTA -->
       <div class="page on" id="page-consulta">
         <div class="ptitle">Consultar <span>convênio</span></div>
@@ -490,7 +528,7 @@ body{min-height:100vh;display:flex;flex-direction:column}
           </div>
 
           <!-- KPIs consolidados -->
-          <div class="sdiv"><span>📊 Visão geral</span></div>
+          <div class="sdiv"><span>📊 Visão geral consolidada</span></div>
           <div class="kpirow" id="kpi-consolidado"></div>
 
           <!-- Propostas -->
@@ -757,6 +795,7 @@ async function enterApp(adm){
   }
 
   await loadStatus();
+  if(document.getElementById('page-visao')?.classList.contains('on')) loadVisaoGeral();
 }
 function logout(){
   if(!confirm('Sair?'))return;
@@ -867,16 +906,14 @@ async function deleteUser(id,nome){
 
 /* ── Nav ── */
 function goPage(p){
-  // Bloqueia acesso a páginas de admin para usuário comum
   const paginasAdmin=['upload','usuarios','sobre'];
-  if(!isAdm && paginasAdmin.includes(p)){
-    p='consulta';
-  }
+  if(!isAdm && paginasAdmin.includes(p)) p='consulta';
   document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));
   document.querySelectorAll('.nitem').forEach(e=>e.classList.remove('on'));
   document.getElementById('page-'+p).classList.add('on');
   const n=document.getElementById('nav-'+p);if(n)n.classList.add('on');
   if(p==='usuarios') loadUsers();
+  if(p==='visao') loadVisaoGeral();
 }
 
 /* ── Status ── */
@@ -1058,7 +1095,7 @@ function renderKpisConsolidados(d){
       lbl:'IPP do convênio',
       val:`${Number(d.ipp.valor).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`,
       sub: d.ipp.detalhe
-        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} Serviodres`
+        ? `${d.ipp.detalhe.qtdServ.toLocaleString('pt-BR')} serv. ÷ ${d.ipp.detalhe.totalContratos} contratos`
         : d.ipp.nome||'taxa de repasse',
       cls:'kp-ye',
       ico:`<svg viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`
@@ -1094,7 +1131,7 @@ function renderBlocoPropostas(d){
   const prColors= ['#3b82f6','#f97316','#22c55e','#f59e0b','#a855f7','#ef4444','#06b6d4','#ec4899'];
 
   bp.innerHTML=`
-    <div class="sdiv"><span>📋 Operação Cartos</span></div>
+    <div class="sdiv"><span>📋 Operações Cartos</span></div>
 
     <!-- KPIs -->
     <div class="kpirow" id="kpi-prop"></div>
@@ -1255,6 +1292,102 @@ function renderBlocoCartoes(d){
       renderBarras('bars-produto-cart',sorted.map(e=>e[0]),sorted.map(e=>e[1]),kc.total,prColorsC);
     }
   },60);
+}
+
+/* ── Visão Geral ── */
+let vgCharts={};
+
+async function loadVisaoGeral(){
+  const el=document.getElementById('vg-content');
+  el.innerHTML=`<div class="vg-loading"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>Carregando dados...</div>`;
+  try{
+    const r=await fetch(API+'/api/visao-geral');
+    const d=await r.json();
+    if(!d.ok){el.innerHTML='<div class="vg-loading">Erro ao carregar dados.</div>';return;}
+    renderVisaoGeral(d,el);
+  }catch(e){el.innerHTML='<div class="vg-loading">Erro de conexão.</div>';}
+}
+
+function renderVisaoGeral(d,el){
+  Object.values(vgCharts).forEach(c=>{try{c.destroy();}catch(e){}});
+  vgCharts={};
+
+  const {totais,top10,prodList,regimeList}=d;
+  const SVG={
+    prod:`<svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`,
+    cancel:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+    ops:`<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>`,
+    cons:`<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+    cart:`<svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+    fict:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`,
+  };
+
+  const kpis=[
+    {lbl:'Produção total',val:fmtM(totais.prod),sub:`Consig. ${fmtM(totais.prodCons)} · Cartão ${fmtM(totais.prodCart)} · Fictor ${fmtM(totais.prodFict)}`,cls:'kp-or',ico:SVG.prod},
+    {lbl:'Canceladas total',val:fmtM(totais.cancel),sub:`Consig. ${fmtM(totais.cancelCons)} · Cartão ${fmtM(totais.cancelCart)} · Fictor ${fmtM(totais.cancelFict)}`,cls:'kp-re',ico:SVG.cancel},
+    {lbl:'Total operações',val:totais.ops.toLocaleString('pt-BR'),sub:'propostas + cartões + Fictor',cls:'kp-bl',ico:SVG.ops},
+  ];
+
+  el.innerHTML=`
+    <!-- KPIs -->
+    <div class="vg-kpis">${kpis.map(k=>`
+      <div class="kpi ${k.cls}" style="animation:fadeUp .35s ease both">
+        <div class="kpi-ico">${k.ico}</div>
+        <div class="kpi-lbl">${k.lbl}</div>
+        <div class="kpi-val">${k.val}</div>
+        <div class="kpi-sub">${k.sub}</div>
+      </div>`).join('')}
+    </div>
+
+    <!-- Top 10 + Gráficos -->
+    <div class="vg-top">
+      <!-- Top 10 convênios -->
+      <div class="sec" style="animation:fadeUp .4s ease .05s both">
+        <div class="sec-hdr">
+          <div class="sec-title">🏆 Top 10 convênios por produção</div>
+          <span class="sec-badge sb-or">${top10.length}</span>
+        </div>
+        <div>${top10.map((c,i)=>`
+          <div class="top-item" onclick="document.getElementById('sinput').value='${c.nome.replace(/'/g,"\'")}';goPage('consulta');buscar()">
+            <div class="top-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i+1}</div>
+            <div class="top-nome" title="${c.nome}">${c.nome}</div>
+            <div class="top-ops">${c.ops} ops</div>
+            <div class="top-val">${fmtM(c.prod)}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Gráficos lado a lado -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <!-- Produto -->
+        <div class="ccard" style="animation:fadeUp .4s ease .1s both;flex:1">
+          <div class="ctitle">Distribuição por produto</div>
+          <div style="padding-top:4px">${prodList.map((p,i)=>{
+            const pct=(p.qtd/prodList[0].qtd*100).toFixed(1);
+            const colors=['#f97316','#3b82f6','#22c55e','#f59e0b','#a855f7','#ef4444','#06b6d4','#ec4899'];
+            return `<div class="vg-bar-row">
+              <div class="vg-bar-label" title="${p.produto}">${p.produto}</div>
+              <div class="vg-bar-track"><div class="vg-bar-fill" style="width:${pct}%;background:${colors[i%colors.length]}"></div></div>
+              <div class="vg-bar-qty">${p.qtd}</div>
+            </div>`;
+          }).join('')}</div>
+        </div>
+
+        <!-- Regime -->
+        <div class="ccard" style="animation:fadeUp .4s ease .15s both;flex:1">
+          <div class="ctitle">Regime jurídico</div>
+          <div style="padding-top:4px">${regimeList.map((r,i)=>{
+            const pct=(r.qtd/regimeList[0].qtd*100).toFixed(1);
+            const colors=['#f97316','#3b82f6','#22c55e','#f59e0b','#a855f7','#ef4444'];
+            return `<div class="vg-bar-row">
+              <div class="vg-bar-label" title="${r.regime}">${r.regime}</div>
+              <div class="vg-bar-track"><div class="vg-bar-fill" style="width:${pct}%;background:${colors[i%colors.length]}"></div></div>
+              <div class="vg-bar-qty">${r.qtd}</div>
+            </div>`;
+          }).join('')}</div>
+        </div>
+      </div>
+    </div>`;
 }
 
 /* ── Bloco Fictor ── */

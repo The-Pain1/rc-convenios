@@ -450,6 +450,125 @@ app.get('/api/convenio', (req, res) => {
 // ════════════════════════════════════════════════════════════
 //  LIMPAR DADOS
 // ════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════
+//  VISÃO GERAL
+// ════════════════════════════════════════════════════════════
+app.get('/api/visao-geral', (req, res) => {
+  const db = readDB();
+
+  const isCancelada=(st)=>{
+    const sl=norm(String(st||''));
+    return sl.includes('cancel')||sl.includes('reprova')||sl.includes('recusad')||sl.includes('negad');
+  };
+  const isCanceladaCart=(st)=>{
+    const sl=norm(String(st||''));
+    return sl.includes('cancel')||sl.includes('reprova')||sl.includes('erro')||sl.includes('rascunho');
+  };
+
+  // ── Totais gerais ──
+  let totProd=0, totCancel=0, totOps=0;
+  let totProdCons=0, totProdCart=0, totProdFict=0;
+  let totCancelCons=0, totCancelCart=0, totCancelFict=0;
+
+  // Propostas
+  const prodCnt={}, regimeCnt={};
+  db.propostas.forEach(r=>{
+    const st=String(r['Status']||'');
+    const vlr=pNum(r['Vlr Solicitado']||0);
+    const pr=String(r['Produto']||'Não informado').trim();
+    const rg=String(r['Regime Juridico Contratação']||r['Regime Juridico Contratacao']||'Não informado').trim();
+    if(isCancelada(st)){totCancelCons+=vlr;}
+    else{totProdCons+=vlr;prodCnt[pr]=(prodCnt[pr]||0)+1;regimeCnt[rg]=(regimeCnt[rg]||0)+1;}
+    totOps++;
+  });
+
+  // Cartões
+  const prodCntCart={};
+  (db.cartoes||[]).forEach(r=>{
+    const st=String(r['Status']||'');
+    const vlr=pNum(r['VOP']||0);
+    const pr=String(r['Produto']||'Não informado').trim();
+    if(isCanceladaCart(st)){totCancelCart+=vlr;}
+    else{totProdCart+=vlr;prodCntCart[pr]=(prodCntCart[pr]||0)+1;}
+    totOps++;
+  });
+
+  // Fictor
+  const prodCntFict={};
+  (db.fictor||[]).forEach(r=>{
+    const st=String(r['Status']||'');
+    const vlr=pNum(r['Vlr Solicitado']||0);
+    const pr=String(r['Produto']||'Não informado').trim();
+    if(isCancelada(st)){totCancelFict+=vlr;}
+    else{totProdFict+=vlr;prodCntFict[pr]=(prodCntFict[pr]||0)+1;}
+    totOps++;
+  });
+
+  totProd=totProdCons+totProdCart+totProdFict;
+  totCancel=totCancelCons+totCancelCart+totCancelFict;
+
+  // ── Top 10 convênios por produção ──
+  const convMap={};
+
+  db.propostas.forEach(r=>{
+    const nome=nomeConvP1(r);
+    if(!nome) return;
+    const st=String(r['Status']||'');
+    const vlr=pNum(r['Vlr Solicitado']||0);
+    if(!convMap[nome]) convMap[nome]={nome,prod:0,cancel:0,ops:0};
+    if(isCancelada(st)) convMap[nome].cancel+=vlr;
+    else{convMap[nome].prod+=vlr;convMap[nome].ops++;}
+  });
+
+  (db.cartoes||[]).forEach(r=>{
+    const nomes=nomesConvP2(r);
+    const nome=nomes[0]||nomes[1]||'';
+    if(!nome) return;
+    const st=String(r['Status']||'');
+    const vlr=pNum(r['VOP']||0);
+    if(!convMap[nome]) convMap[nome]={nome,prod:0,cancel:0,ops:0};
+    if(isCanceladaCart(st)) convMap[nome].cancel+=vlr;
+    else{convMap[nome].prod+=vlr;convMap[nome].ops++;}
+  });
+
+  (db.fictor||[]).forEach(r=>{
+    const nome=String(r['Convênio']||r['Convenio']||'').trim();
+    if(!nome) return;
+    const st=String(r['Status']||'');
+    const vlr=pNum(r['Vlr Solicitado']||0);
+    if(!convMap[nome]) convMap[nome]={nome,prod:0,cancel:0,ops:0};
+    if(isCancelada(st)) convMap[nome].cancel+=vlr;
+    else{convMap[nome].prod+=vlr;convMap[nome].ops++;}
+  });
+
+  const top10=Object.values(convMap)
+    .filter(c=>c.prod>0)
+    .sort((a,b)=>b.prod-a.prod)
+    .slice(0,10);
+
+  // ── Distribuição produto (consolida as 3) ──
+  const prodTodos={};
+  Object.entries(prodCnt).forEach(([k,v])=>{prodTodos[k]=(prodTodos[k]||0)+v;});
+  Object.entries(prodCntCart).forEach(([k,v])=>{prodTodos[k]=(prodTodos[k]||0)+v;});
+  Object.entries(prodCntFict).forEach(([k,v])=>{prodTodos[k]=(prodTodos[k]||0)+v;});
+  const prodList=Object.entries(prodTodos).map(([p,q])=>({produto:p,qtd:q})).sort((a,b)=>b.qtd-a.qtd).slice(0,8);
+
+  // ── Regime jurídico ──
+  const regimeList=Object.entries(regimeCnt).map(([r,q])=>({regime:r,qtd:q})).sort((a,b)=>b.qtd-a.qtd).slice(0,6);
+
+  res.json({
+    ok:true,
+    totais:{
+      prod:totProd, cancel:totCancel, ops:totOps,
+      prodCons:totProdCons, prodCart:totProdCart, prodFict:totProdFict,
+      cancelCons:totCancelCons, cancelCart:totCancelCart, cancelFict:totCancelFict,
+    },
+    top10,
+    prodList,
+    regimeList,
+  });
+});
+
 app.delete('/api/dados', (req, res) => {
   writeDB({propostas:[],cartoes:[],fictor:[],ipp:[],servidores:[],updatedAt:null,f1:'',f2:'',f3:'',f4:'',f5:''});
   res.json({ok:true});
